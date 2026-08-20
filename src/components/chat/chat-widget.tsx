@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { useChat } from "./chat-context";
 import type { ChatMessage, CompactProperty } from "@/services/ai/types";
 
 const INITIAL_GREETING: ChatMessage = {
@@ -81,7 +82,7 @@ function ChatPropertyCard({ property }: { property: CompactProperty }) {
 }
 
 export function ChatWidget() {
-  const [isOpen, setIsOpen] = useState(false);
+  const { isOpen, openChat, closeChat, pendingQuery, clearPendingQuery } = useChat();
   const [session, setSession] = useState<ChatSession | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([INITIAL_GREETING]);
   const [input, setInput] = useState("");
@@ -91,6 +92,8 @@ export function ChatWidget() {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const activeInput = input || (isOpen && pendingQuery ? pendingQuery : "");
 
   // 1. Rehydrate conversation session from localStorage asynchronously
   useEffect(() => {
@@ -256,7 +259,7 @@ export function ChatWidget() {
       {!isOpen && (
         <button
           type="button"
-          onClick={() => setIsOpen(true)}
+          onClick={() => openChat()}
           aria-label="Open Aether AI Concierge Chat"
           className="group flex items-center gap-3 rounded-full bg-brand-ink px-5 py-3.5 text-brand-cream shadow-xl transition-all duration-300 hover:scale-105 hover:bg-brand-ink/90 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-brand-gold cursor-pointer"
         >
@@ -315,7 +318,7 @@ export function ChatWidget() {
               </button>
               <button
                 type="button"
-                onClick={() => setIsOpen(false)}
+                onClick={() => closeChat()}
                 aria-label="Close chat"
                 className="rounded p-1.5 text-brand-cream/60 hover:bg-white/10 hover:text-brand-cream focus:outline-none cursor-pointer"
               >
@@ -451,7 +454,9 @@ export function ChatWidget() {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              handleSendMessage();
+              const text = activeInput.trim();
+              if (pendingQuery) clearPendingQuery();
+              handleSendMessage(text);
             }}
             className="border-t border-brand-line/80 bg-brand-cream p-3"
           >
@@ -459,8 +464,11 @@ export function ChatWidget() {
               <input
                 ref={inputRef}
                 type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
+                value={activeInput}
+                onChange={(e) => {
+                  if (pendingQuery) clearPendingQuery();
+                  setInput(e.target.value);
+                }}
                 placeholder="Ask about properties or connect with an advisor..."
                 disabled={isLoading}
                 maxLength={2000}
@@ -469,7 +477,7 @@ export function ChatWidget() {
               <Button
                 type="submit"
                 size="sm"
-                disabled={!input.trim() || isLoading}
+                disabled={!activeInput.trim() || isLoading}
                 className="px-3 cursor-pointer"
               >
                 Send

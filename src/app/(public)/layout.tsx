@@ -1,6 +1,7 @@
 import { PublicNavbar } from "@/components/layout/public-navbar";
 import { PublicFooter } from "@/components/layout/public-footer";
 import { ChatWidget } from "@/components/chat/chat-widget";
+import { ChatProvider } from "@/components/chat/chat-context";
 
 export default function PublicLayout({
   children,
@@ -8,11 +9,13 @@ export default function PublicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen flex-col bg-brand-cream text-brand-ink">
-      <PublicNavbar />
-      <main className="flex-1">{children}</main>
-      <PublicFooter />
-      <ChatWidget />
-    </div>
+    <ChatProvider>
+      <div className="flex min-h-screen flex-col bg-brand-cream text-brand-ink">
+        <PublicNavbar />
+        <main className="flex-1">{children}</main>
+        <PublicFooter />
+        <ChatWidget />
+      </div>
+    </ChatProvider>
   );
 }

@@ -6,6 +6,7 @@ import { FeaturedLocations } from "@/components/home/featured-locations";
 import { WhyUs } from "@/components/home/why-us";
 import { HowItWorks } from "@/components/home/how-it-works";
 import { CtaBanner } from "@/components/home/cta-banner";
+import { TalkToExpertButton } from "@/components/home/talk-to-expert-button";
 import { Button } from "@/components/ui/button";
 import { site, routes } from "@/config/site";
 import type { Metadata } from "next";
@@ -51,11 +52,7 @@ export default async function HomePage() {
               <Link href={routes.properties}>
                 <Button size="lg">Explore Properties</Button>
               </Link>
-              <Link href="/#contact">
-                <Button variant="secondary" size="lg">
-                  Talk to an Expert
-                </Button>
-              </Link>
+              <TalkToExpertButton size="lg" variant="secondary" />
             </div>
           </div>
 

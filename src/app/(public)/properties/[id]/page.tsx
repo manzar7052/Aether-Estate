@@ -5,6 +5,7 @@ import { PropertyGallery } from "@/components/properties/property-gallery";
 import { PropertyCard, formatPrice, formatPropertyType } from "@/components/properties/property-card";
 import { LeadInquiryForm } from "@/components/properties/lead-inquiry-form";
 import { LeadInquiryModal } from "@/components/properties/lead-inquiry-modal";
+import { TalkToExpertButton } from "@/components/home/talk-to-expert-button";
 import { Badge } from "@/components/ui/badge";
 import { site, routes } from "@/config/site";
 import type { Metadata } from "next";
@@ -284,13 +285,23 @@ export default async function PropertyDetailPage({
             </div>
 
             {/* Concierge Note */}
-            <div className="rounded-sm border border-brand-line/60 bg-brand-cream p-4 text-xs text-brand-ink/70 space-y-1">
+            <div className="rounded-sm border border-brand-line/60 bg-brand-cream p-4 text-xs text-brand-ink/70 space-y-2">
               <p className="font-medium text-brand-ink">
                 Aether Concierge Advisory
               </p>
               <p className="text-[11px] leading-relaxed">
                 Dedicated representation with transparent disclosures, verified square footage, and direct agent communication.
               </p>
+              <div className="pt-1 border-t border-brand-line/40">
+                <TalkToExpertButton
+                  variant="ghost"
+                  size="sm"
+                  initialQuery={`Tell me more about ${property.title} in ${property.city}`}
+                  className="w-full justify-center text-xs font-semibold text-brand-gold hover:text-brand-ink hover:bg-brand-sand/50 h-8"
+                >
+                  Chat with Concierge about this home &rarr;
+                </TalkToExpertButton>
+              </div>
             </div>
           </div>
         </div>

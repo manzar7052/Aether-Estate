@@ -6,11 +6,13 @@ import { usePathname } from "next/navigation";
 import { Logo } from "./logo";
 import { Button } from "@/components/ui/button";
 import { navLinks, routes } from "@/config/site";
+import { useChat } from "@/components/chat/chat-context";
 
 export function PublicNavbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
+  const { openChat } = useChat();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,8 +21,6 @@ export function PublicNavbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
@@ -62,9 +62,24 @@ export function PublicNavbar() {
           className="hidden items-center gap-8 md:flex"
         >
           {navLinks.map((link) => {
+            const isContact = link.label === "Contact";
             const isActive =
               pathname === link.href ||
               ((link.href as string) !== "/" && pathname.startsWith(link.href));
+
+            if (isContact) {
+              return (
+                <button
+                  key={link.label}
+                  type="button"
+                  onClick={() => openChat()}
+                  className="text-sm font-medium transition-colors hover:text-brand-ink text-brand-ink/70 cursor-pointer"
+                >
+                  {link.label}
+                </button>
+              );
+            }
+
             return (
               <Link
                 key={link.label}
@@ -132,16 +147,36 @@ export function PublicNavbar() {
           className="fixed inset-0 top-[65px] z-40 flex flex-col bg-brand-cream px-6 py-8 md:hidden"
         >
           <nav className="flex flex-col gap-6">
-            {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                onClick={() => setIsOpen(false)}
-                className="font-serif text-2xl font-normal text-brand-ink transition-colors hover:text-brand-gold"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const isContact = link.label === "Contact";
+
+              if (isContact) {
+                return (
+                  <button
+                    key={link.label}
+                    type="button"
+                    onClick={() => {
+                      setIsOpen(false);
+                      openChat();
+                    }}
+                    className="font-serif text-2xl font-normal text-brand-ink text-left transition-colors hover:text-brand-gold cursor-pointer"
+                  >
+                    {link.label}
+                  </button>
+                );
+              }
+
+              return (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  onClick={() => setIsOpen(false)}
+                  className="font-serif text-2xl font-normal text-brand-ink transition-colors hover:text-brand-gold"
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="mt-auto flex flex-col gap-3 pt-6 border-t border-brand-line">

@@ -1,9 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import { Logo } from "./logo";
 import { site, routes } from "@/config/site";
+import { useChat } from "@/components/chat/chat-context";
 
 export function PublicFooter() {
   const currentYear = new Date().getFullYear();
+  const { openChat } = useChat();
 
   return (
     <footer className="border-t border-brand-line/80 bg-brand-sand/50 text-brand-ink">
@@ -98,12 +102,13 @@ export function PublicFooter() {
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/#contact"
-                  className="transition-colors hover:text-brand-ink"
+                <button
+                  type="button"
+                  onClick={() => openChat()}
+                  className="text-left text-sm text-brand-ink/70 transition-colors hover:text-brand-ink cursor-pointer"
                 >
                   Contact Concierge
-                </Link>
+                </button>
               </li>
               <li>
                 <Link
