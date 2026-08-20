@@ -16,6 +16,6 @@
     "SUPABASE_SERVICE_ROLE_KEY": "sb_secret_nHSMYynZupblgblm7HOr4Q_rO0qVPpU",
     "GEMINI_API_KEY": "AQ.Ab8RN6Jz1SyHm9fpGIylpGdat94DDwlUVAjmqsIZvgkJphOyOQ",
     "AI_PROVIDER": "gemini",
-    "GEMINI_MODEL": "gemini-2.5-flash"
+    "GEMINI_MODEL": "gemini-3.6-flash"
   }
 }

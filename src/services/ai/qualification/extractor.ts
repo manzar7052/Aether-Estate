@@ -49,16 +49,43 @@ export async function extractQualificationSignals(
   const prompt = buildQualificationPrompt(context);
 
   try {
-    const response = await client.models.generateContent({
-      model: modelName,
-      contents: [{ role: "user", parts: [{ text: prompt }] }],
-      config: {
-        systemInstruction: AI_QUALIFICATION_SYSTEM_PROMPT,
-        responseMimeType: "application/json",
-        temperature: 0.1, // Low temperature for high precision extraction
-        maxOutputTokens: 1200,
-      },
-    });
+    let response;
+    try {
+      response = await client.models.generateContent({
+        model: modelName,
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        config: {
+          systemInstruction: AI_QUALIFICATION_SYSTEM_PROMPT,
+          responseMimeType: "application/json",
+          temperature: 0.1, // Low temperature for high precision extraction
+          maxOutputTokens: 1200,
+        },
+      });
+    } catch (initialErr: unknown) {
+      const errMsg = String(initialErr);
+      if (
+        errMsg.includes("404") ||
+        errMsg.includes("not longer available") ||
+        errMsg.includes("NOT_FOUND")
+      ) {
+        console.warn(
+          `[AI Extractor] Falling back from ${modelName} to gemini-3.6-flash`,
+        );
+        modelName = "gemini-3.6-flash";
+        response = await client.models.generateContent({
+          model: "gemini-3.6-flash",
+          contents: [{ role: "user", parts: [{ text: prompt }] }],
+          config: {
+            systemInstruction: AI_QUALIFICATION_SYSTEM_PROMPT,
+            responseMimeType: "application/json",
+            temperature: 0.1,
+            maxOutputTokens: 1200,
+          },
+        });
+      } else {
+        throw initialErr;
+      }
+    }
 
     const responseText = response.text?.trim();
 
