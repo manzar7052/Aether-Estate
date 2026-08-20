@@ -44,3 +44,7 @@ next-env.d.ts
 
 # scratch
 scratch/
+
+# cloudflare
+.open-next/
+.wrangler/
