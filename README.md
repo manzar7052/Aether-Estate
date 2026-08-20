@@ -7,7 +7,8 @@
 
 ## Live Demo & Showcase
 
-* **Hosting & Runtime**: Cloudflare Pages / Workers (OpenNext) with live Supabase PostgreSQL backend
+* **Production URL**: [https://aether-estate.manzarhaidri786.workers.dev](https://aether-estate.manzarhaidri786.workers.dev) (Deployed on Cloudflare Workers Edge Network with live Supabase PostgreSQL backend)
+* **Hosting & Runtime**: Cloudflare Workers (OpenNext)
 * **Demo Environment**: Pre-seeded with 12 luxury properties, 10 fictional leads across HOT/WARM/COLD tiers, full AI chat transcripts, and appointments across life-cycle states.
 * **Demo Walkthrough Guide**: See [`docs/demo-environment.md`](file:///Users/samarborairabbas/ai-real-estate-leads/docs/demo-environment.md) and [`docs/demo-script.md`](file:///Users/samarborairabbas/ai-real-estate-leads/docs/demo-script.md).
 
