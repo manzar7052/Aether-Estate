@@ -14,7 +14,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
   const { profile } = await requireAdmin();
 
   return (
-    <AppShell profile={profile} title="Admin Portal — Phase 1">
+    <AppShell profile={profile} title="Admin Portal — Executive Oversight">
       {children}
     </AppShell>
   );

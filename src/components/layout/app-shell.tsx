@@ -1,5 +1,8 @@
+"use client";
+
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Logo } from "@/components/layout/logo";
 import { LogoutButton } from "@/components/shared/logout-button";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +17,15 @@ export function AppShell({
   title: string;
   children: ReactNode;
 }) {
+  const pathname = usePathname();
+
+  const navItems = [
+    { label: "Overview", href: "/dashboard" },
+    { label: "Leads CRM", href: "/dashboard/leads" },
+    { label: "Appointments", href: "/dashboard/appointments" },
+    ...(profile.role === "admin" ? [{ label: "Admin", href: "/admin" }] : []),
+  ];
+
   return (
     <div className="min-h-full bg-brand-cream text-brand-ink">
       <header className="sticky top-0 z-40 border-b border-brand-line bg-white/90 backdrop-blur">
@@ -21,32 +33,25 @@ export function AppShell({
           <div className="flex items-center gap-6">
             <Logo href={profile.role === "admin" ? "/admin" : "/dashboard"} />
             <nav className="hidden items-center gap-1 sm:flex">
-              <Link
-                href="/dashboard"
-                className="rounded-lg px-3 py-1.5 text-sm font-medium text-brand-slate transition hover:bg-brand-sand hover:text-brand-ink"
-              >
-                Overview
-              </Link>
-              <Link
-                href="/dashboard/leads"
-                className="rounded-lg px-3 py-1.5 text-sm font-medium text-brand-slate transition hover:bg-brand-sand hover:text-brand-ink"
-              >
-                Leads CRM
-              </Link>
-              <Link
-                href="/dashboard/appointments"
-                className="rounded-lg px-3 py-1.5 text-sm font-medium text-brand-slate transition hover:bg-brand-sand hover:text-brand-ink"
-              >
-                Appointments
-              </Link>
-              {profile.role === "admin" && (
-                <Link
-                  href="/admin"
-                  className="rounded-lg px-3 py-1.5 text-sm font-medium text-brand-slate transition hover:bg-brand-sand hover:text-brand-ink"
-                >
-                  Admin
-                </Link>
-              )}
+              {navItems.map((item) => {
+                const isActive =
+                  pathname === item.href ||
+                  (item.href !== "/dashboard" && pathname.startsWith(item.href));
+
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`rounded-lg px-3 py-1.5 text-sm font-medium transition cursor-pointer ${
+                      isActive
+                        ? "bg-brand-ink text-brand-cream font-semibold shadow-xs"
+                        : "text-brand-slate hover:bg-brand-sand hover:text-brand-ink"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
             </nav>
           </div>
           <div className="flex items-center gap-3">
@@ -63,33 +68,26 @@ export function AppShell({
           </div>
         </div>
         {/* Mobile Navigation bar */}
-        <div className="flex items-center gap-2 border-t border-brand-line px-4 py-2 sm:hidden">
-          <Link
-            href="/dashboard"
-            className="rounded px-2.5 py-1 text-xs font-medium text-brand-slate hover:bg-brand-sand hover:text-brand-ink"
-          >
-            Overview
-          </Link>
-          <Link
-            href="/dashboard/leads"
-            className="rounded px-2.5 py-1 text-xs font-medium text-brand-slate hover:bg-brand-sand hover:text-brand-ink"
-          >
-            Leads CRM
-          </Link>
-          <Link
-            href="/dashboard/appointments"
-            className="rounded px-2.5 py-1 text-xs font-medium text-brand-slate hover:bg-brand-sand hover:text-brand-ink"
-          >
-            Appointments
-          </Link>
-          {profile.role === "admin" && (
-            <Link
-              href="/admin"
-              className="rounded px-2.5 py-1 text-xs font-medium text-brand-slate hover:bg-brand-sand hover:text-brand-ink"
-            >
-              Admin
-            </Link>
-          )}
+        <div className="flex items-center gap-2 border-t border-brand-line px-4 py-2 sm:hidden overflow-x-auto">
+          {navItems.map((item) => {
+            const isActive =
+              pathname === item.href ||
+              (item.href !== "/dashboard" && pathname.startsWith(item.href));
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`rounded px-2.5 py-1 text-xs font-medium whitespace-nowrap transition cursor-pointer ${
+                  isActive
+                    ? "bg-brand-ink text-brand-cream font-semibold"
+                    : "text-brand-slate hover:bg-brand-sand hover:text-brand-ink"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </div>
       </header>
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
