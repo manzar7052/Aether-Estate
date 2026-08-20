@@ -42,16 +42,14 @@ export function CRMClient({
   const currentView = searchParams.view === "table" ? "table" : "kanban";
 
   const [leads, setLeads] = useState<Lead[]>(initialData.leads);
+  const [prevInitialLeads, setPrevInitialLeads] = useState<Lead[]>(initialData.leads);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [updatingLeadId, setUpdatingLeadId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Sync state if initialData changes via server refresh
-  if (
-    initialData.leads !== leads &&
-    updatingLeadId === null &&
-    initialData.leads.length !== leads.length
-  ) {
+  // Idiomatically adjust state when initialData prop changes
+  if (initialData.leads !== prevInitialLeads) {
+    setPrevInitialLeads(initialData.leads);
     setLeads(initialData.leads);
   }
 

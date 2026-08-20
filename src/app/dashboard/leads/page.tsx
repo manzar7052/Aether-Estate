@@ -39,7 +39,7 @@ export default async function LeadsCRMPage(props: CRMPageProps) {
   // 1. Authorize staff caller identity and role
   const { profile } = await requireStaff();
 
-  const searchParams = await props.searchParams;
+  const searchParams = (await props.searchParams) ?? {};
 
   // 2. Fetch assignable agents list for admin selectors
   let agents: AgentSummary[] = [];
@@ -69,8 +69,25 @@ export default async function LeadsCRMPage(props: CRMPageProps) {
       sort: searchParams.sort,
       page: searchParams.page ? Number(searchParams.page) : 1,
       pageSize: searchParams.pageSize ? Number(searchParams.pageSize) : 20,
+    }).catch((err) => {
+      console.error("[LeadsCRMPage] Failed getCRMLeads:", err);
+      return {
+        leads: [],
+        totalCount: 0,
+        page: 1,
+        pageSize: 20,
+        totalPages: 1,
+      };
     }),
-    getCRMSummaryMetrics(),
+    getCRMSummaryMetrics().catch((err) => {
+      console.error("[LeadsCRMPage] Failed getCRMSummaryMetrics:", err);
+      return {
+        totalLeads: 0,
+        newLeads: 0,
+        qualifiedLeads: 0,
+        hotLeads: 0,
+      };
+    }),
   ]);
 
   return (

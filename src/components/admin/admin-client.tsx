@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
@@ -144,6 +144,12 @@ export function AdminClient({
     router.refresh();
   }
 
+  // Prefetch CRM route for instant navigation
+  useEffect(() => {
+    router.prefetch("/dashboard/leads");
+    router.prefetch("/dashboard/appointments");
+  }, [router]);
+
   return (
     <div className="space-y-8">
       {/* Toast Alerts */}
@@ -189,15 +195,16 @@ export function AdminClient({
         </div>
 
         <div className="flex items-center gap-3">
-          <Link
-            href="/dashboard/leads"
+          <button
+            type="button"
+            onClick={() => router.push("/dashboard/leads")}
             className="inline-flex items-center gap-2 rounded-xl bg-brand-ink px-5 py-2.5 text-xs font-semibold text-white shadow-sm hover:bg-black transition cursor-pointer"
           >
             <span>Open Leads CRM</span>
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>
-          </Link>
+          </button>
         </div>
       </div>
 
@@ -215,12 +222,13 @@ export function AdminClient({
               Click &quot;Manage&quot; on any prospect to view full details, update status, assign agents, or trigger AI qualification.
             </p>
           </div>
-          <Link
-            href="/dashboard/leads"
+          <button
+            type="button"
+            onClick={() => router.push("/dashboard/leads")}
             className="text-xs font-semibold text-brand-gold hover:text-brand-ink transition-colors cursor-pointer"
           >
             View All in CRM ({totalCount}) &rarr;
-          </Link>
+          </button>
         </div>
 
         <Card className="overflow-hidden border border-brand-line/80 p-0 shadow-sm">
