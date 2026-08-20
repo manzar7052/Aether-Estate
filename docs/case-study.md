@@ -80,7 +80,7 @@ COMMUNICATION AUDIT HISTORY (Immutable Activity Log)
 * **Database & Auth**: Supabase Managed PostgreSQL 15+, Row-Level Security (RLS), Supabase Auth.
 * **AI Layer**: Google GenAI SDK (`gemini-3.6-flash`), Server-side Function Calling / Tool Allowlisting.
 * **Notifications**: Resend Transactional Email Engine, Twilio WhatsApp Messaging, Cron-based Reminder Processor.
-* **Hosting**: Netlify Edge CDN & Serverless Compute.
+* **Hosting**: Cloudflare Pages / Workers & OpenNext.
 
 ---
 

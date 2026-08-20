@@ -72,7 +72,7 @@
 * **AI Provider**: Google GenAI API (Gemini).
 * **Email Provider**: Resend transactional API with development console fallback.
 * **WhatsApp Provider**: Twilio WhatsApp Business API with development console fallback.
-* **Hosting / CDN**: Netlify Edge Network & App Router Server Functions.
+* **Hosting / CDN**: Cloudflare Pages & OpenNext Serverless Functions.
 
 ---
 

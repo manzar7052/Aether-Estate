@@ -7,7 +7,7 @@
 
 ## Live Demo & Showcase
 
-* **Production URL**: [https://aetherestate.netlify.app](https://aetherestate.netlify.app) (Deployed on Netlify Edge CDN with live Supabase PostgreSQL backend)
+* **Hosting & Runtime**: Cloudflare Pages / Workers (OpenNext) with live Supabase PostgreSQL backend
 * **Demo Environment**: Pre-seeded with 12 luxury properties, 10 fictional leads across HOT/WARM/COLD tiers, full AI chat transcripts, and appointments across life-cycle states.
 * **Demo Walkthrough Guide**: See [`docs/demo-environment.md`](file:///Users/samarborairabbas/ai-real-estate-leads/docs/demo-environment.md) and [`docs/demo-script.md`](file:///Users/samarborairabbas/ai-real-estate-leads/docs/demo-script.md).
 
@@ -66,7 +66,7 @@ Aether Estates solves the lead drop-off problem in luxury real estate by replaci
 * **AI Layer**: Google GenAI SDK (`gemini-2.5-flash`), Server-Side Function Calling & Tool Allowlisting.
 * **Email Provider**: Resend Transactional Email API (with development console fallback).
 * **WhatsApp Provider**: Twilio WhatsApp Business API (with development console fallback).
-* **Hosting & Infrastructure**: Netlify Edge Network & Serverless Next.js Runtime.
+* **Hosting & Infrastructure**: Cloudflare Pages / Workers & OpenNext.
 
 ---
 
