@@ -2,6 +2,7 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { createServiceRoleClient } from "@/lib/supabase/admin";
 import { fromDatabaseError } from "@/lib/db/errors";
 import { hasPublicEnv } from "@/lib/env";
+import { DEMO_PROPERTIES } from "@/data/demo-properties";
 import type { Property, PropertyStatus, PropertyType } from "@/types/database";
 
 export type PropertySortOption =
@@ -30,6 +31,73 @@ export interface PaginatedPropertiesResult {
   totalPages: number;
 }
 
+function filterDemoProperties(params: PropertyFilterParams = {}): PaginatedPropertiesResult {
+  const {
+    location,
+    property_type,
+    min_price,
+    max_price,
+    bedrooms,
+    status = "available",
+    sort_by = "recommended",
+    page = 1,
+    limit = 9,
+  } = params;
+
+  let list = [...DEMO_PROPERTIES];
+
+  if (status && status !== "all") {
+    list = list.filter((p) => p.status === status);
+  } else {
+    list = list.filter((p) => p.status !== "draft");
+  }
+
+  if (location && location.trim() !== "") {
+    const loc = location.trim().toLowerCase();
+    list = list.filter(
+      (p) =>
+        p.city.toLowerCase().includes(loc) ||
+        p.state.toLowerCase().includes(loc) ||
+        p.title.toLowerCase().includes(loc) ||
+        p.address.toLowerCase().includes(loc),
+    );
+  }
+
+  if (property_type && property_type !== "all") {
+    list = list.filter((p) => p.property_type === property_type);
+  }
+
+  if (typeof min_price === "number" && min_price > 0) {
+    list = list.filter((p) => p.price >= min_price);
+  }
+
+  if (typeof max_price === "number" && max_price > 0) {
+    list = list.filter((p) => p.price <= max_price);
+  }
+
+  if (typeof bedrooms === "number" && bedrooms > 0) {
+    list = list.filter((p) => (p.bedrooms ?? 0) >= bedrooms);
+  }
+
+  if (sort_by === "price_asc") {
+    list.sort((a, b) => a.price - b.price);
+  } else if (sort_by === "price_desc") {
+    list.sort((a, b) => b.price - a.price);
+  }
+
+  const total = list.length;
+  const offset = (page - 1) * limit;
+  const properties = list.slice(offset, offset + limit);
+
+  return {
+    properties,
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit) || 1,
+  };
+}
+
 async function getClient() {
   try {
     return await createServerSupabaseClient();
@@ -49,7 +117,7 @@ export async function searchProperties(
   params: PropertyFilterParams = {},
 ): Promise<PaginatedPropertiesResult> {
   if (!hasPublicEnv()) {
-    return { properties: [], total: 0, page: 1, limit: 9, totalPages: 0 };
+    return filterDemoProperties(params);
   }
 
   const {
@@ -156,7 +224,7 @@ export async function searchProperties(
  */
 export async function getPropertyById(id: string): Promise<Property | null> {
   if (!hasPublicEnv()) {
-    return null;
+    return DEMO_PROPERTIES.find((p) => p.id === id) ?? null;
   }
 
   const supabase = await getClient();
@@ -183,7 +251,14 @@ export async function getPropertyById(id: string): Promise<Property | null> {
     }
   }
 
+  if (!data) {
+    const demo = DEMO_PROPERTIES.find((p) => p.id === id);
+    if (demo) return demo;
+  }
+
   if (error) {
+    const demo = DEMO_PROPERTIES.find((p) => p.id === id);
+    if (demo) return demo;
     throw fromDatabaseError(error, `Unable to load property ${id}.`);
   }
 

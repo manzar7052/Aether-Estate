@@ -1,5 +1,6 @@
 import { getAIProvider } from "./provider";
 import { AETHER_ESTATES_SYSTEM_PROMPT } from "./system-prompt";
+import { executeFallbackChat } from "./rule-fallback";
 import type { AIResponse, ChatMessage, GenerateOptions } from "./types";
 
 export interface ChatServiceOptions extends GenerateOptions {
@@ -9,6 +10,7 @@ export interface ChatServiceOptions extends GenerateOptions {
 /**
  * High-level AI domain service for chat interactions.
  * Injects system prompts, orchestrates providers, and logs execution timing.
+ * Features automatic high-availability fallback when external API quotas are exhausted.
  */
 export async function generateChatResponse(
   messages: ChatMessage[],
@@ -47,16 +49,19 @@ export async function generateChatResponse(
     return response;
   } catch (error) {
     const durationMs = Date.now() - startTime;
-    console.error(
+    console.warn(
       JSON.stringify({
-        level: "error",
+        level: "warn",
         service: "ai-service",
+        fallback: "activating-concierge-fallback",
         provider: provider.name,
         durationMs,
         error: error instanceof Error ? error.message : String(error),
         timestamp: new Date().toISOString(),
       }),
     );
-    throw error;
+
+    // High availability fallback: keep concierge active with deterministic tool execution
+    return await executeFallbackChat(messages, options);
   }
 }

@@ -7,7 +7,7 @@
 
 ## Live Demo & Showcase
 
-* **Production URL**: Deployed on Netlify Edge CDN with live Supabase PostgreSQL backend.
+* **Production URL**: [https://aetherestate.netlify.app](https://aetherestate.netlify.app) (Deployed on Netlify Edge CDN with live Supabase PostgreSQL backend)
 * **Demo Environment**: Pre-seeded with 12 luxury properties, 10 fictional leads across HOT/WARM/COLD tiers, full AI chat transcripts, and appointments across life-cycle states.
 * **Demo Walkthrough Guide**: See [`docs/demo-environment.md`](file:///Users/samarborairabbas/ai-real-estate-leads/docs/demo-environment.md) and [`docs/demo-script.md`](file:///Users/samarborairabbas/ai-real-estate-leads/docs/demo-script.md).
 
