@@ -9,5 +9,13 @@
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
+  },
+  "vars": {
+    "NEXT_PUBLIC_SUPABASE_URL": "https://htetmxdtvrqmcuhddfff.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_ZbFRpqzyh0i27WzWVlCiiQ_FpxZRQWu",
+    "SUPABASE_SERVICE_ROLE_KEY": "sb_secret_nHSMYynZupblgblm7HOr4Q_rO0qVPpU",
+    "GEMINI_API_KEY": "AQ.Ab8RN6Jz1SyHm9fpGIylpGdat94DDwlUVAjmqsIZvgkJphOyOQ",
+    "AI_PROVIDER": "gemini",
+    "GEMINI_MODEL": "gemini-2.5-flash"
   }
 }

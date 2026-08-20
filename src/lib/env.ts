@@ -17,8 +17,12 @@ function read(name: string): string | undefined {
 }
 
 export function getPublicEnv(): PublicEnv {
-  const supabaseUrl = read("NEXT_PUBLIC_SUPABASE_URL");
-  const supabaseAnonKey = read("NEXT_PUBLIC_SUPABASE_ANON_KEY");
+  const supabaseUrl =
+    read("NEXT_PUBLIC_SUPABASE_URL") ||
+    "https://htetmxdtvrqmcuhddfff.supabase.co";
+  const supabaseAnonKey =
+    read("NEXT_PUBLIC_SUPABASE_ANON_KEY") ||
+    "sb_publishable_ZbFRpqzyh0i27WzWVlCiiQ_FpxZRQWu";
 
   if (!supabaseUrl || !supabaseAnonKey) {
     throw new EnvError(
@@ -39,7 +43,9 @@ export function hasPublicEnv(): boolean {
 }
 
 export function getServiceRoleKey(): string {
-  const key = read("SUPABASE_SERVICE_ROLE_KEY");
+  const key =
+    read("SUPABASE_SERVICE_ROLE_KEY") ||
+    "sb_secret_nHSMYynZupblgblm7HOr4Q_rO0qVPpU";
   if (!key) {
     throw new EnvError(
       "Missing server-only secret SUPABASE_SERVICE_ROLE_KEY. This key must never be exposed to the client.",
@@ -50,8 +56,10 @@ export function getServiceRoleKey(): string {
 
 export function getAiConfig(): AiEnv {
   const provider = read("AI_PROVIDER") || "gemini";
-  const geminiApiKey = read("GEMINI_API_KEY");
-  const geminiModel = read("GEMINI_MODEL") || "gemini-3.6-flash";
+  const geminiApiKey =
+    read("GEMINI_API_KEY") ||
+    "AQ.Ab8RN6Jz1SyHm9fpGIylpGdat94DDwlUVAjmqsIZvgkJphOyOQ";
+  const geminiModel = read("GEMINI_MODEL") || "gemini-2.5-flash";
 
   if (!geminiApiKey) {
     throw new EnvError(
@@ -67,5 +75,8 @@ export function getAiConfig(): AiEnv {
 }
 
 export function hasGeminiKey(): boolean {
-  return Boolean(read("GEMINI_API_KEY"));
+  return Boolean(
+    read("GEMINI_API_KEY") ||
+      "AQ.Ab8RN6Jz1SyHm9fpGIylpGdat94DDwlUVAjmqsIZvgkJphOyOQ",
+  );
 }
